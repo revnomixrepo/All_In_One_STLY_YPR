@@ -220,6 +220,7 @@ def Occ_conv(inputfile,chman,htl,isell_pth,std_pth,statuscode):
     logging.debug('Set standard date format ("%Y-%m-%d") to datecolumn')
     
     #========================Set Room Rev Formats==============================
+    # df_date1['No_of_Rooms'] = df_date1['No_of_Rooms'].astype("Int32")
     df_date1['No_of_Rooms'] = df_date1['No_of_Rooms'].astype(int)
     df_date1['Total_Amount'] = df_date1['Total_Amount'].astype(float)
     logging.debug('Set datatypes for No_of_Rooms and Total_Amount, int and float respectively')

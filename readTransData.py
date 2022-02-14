@@ -45,6 +45,11 @@ def read_trans(freshpth,htlname,ch_man,condn2):
             staahfile['Departure Date'] = staahfile['Departure Date'].str.split(',', expand=True)[0]
             logging.debug('{}{} Read ::'.format(htlname, dataname))
             logging.debug(staahfile)
+            df = staahfile
+            if htlname == "Hotel EnglishPoint & Spa":                                                                    #Y.K.11:Feb:2022 for currency conersion KES to usd($)
+                df["Total Amount: (All Inclusive)"] = np.where(df['Room Type'].str.contains('KES', regex=True),
+                                                               df["Total Amount: (All Inclusive)"] * 0.0088,
+                                                               df["Total Amount: (All Inclusive)"])
 
         elif ch_man in ['Rategain', 'Rategain1']:
             staahfile = pd.read_excel(freshpth + '\{}'.format(htlname + str('{}.xlsx'.format(dataname))))
@@ -150,24 +155,24 @@ def read_trans(freshpth,htlname,ch_man,condn2):
             logging.debug('{}{} Read ::'.format(htlname,dataname))
             logging.debug(staahfile)
 
-        elif ch_man == 'RevSeed':                                     # Y.K. 21"Dec
+        elif ch_man == 'RevSeed':                                                         # Y.K. 21"Dec Added from ReVseed Data make for YPR
             try:
                 staahfile = pd.read_excel(freshpth+'\{}'.format(htlname+str('{}.xlsx'.format(dataname))))
             except:
                 staahfile = pd.read_csv(freshpth + '\{}'.format(htlname + str('{}.csv'.format(dataname))))
 
 
-        elif ch_man == 'AsiaTech1':          # Y.K. 06"Dec
+        elif ch_man == 'AsiaTech1':                                                         # Y.K. 06"Dec
             staahfile = pd.read_csv(freshpth+'\{}'.format(htlname+str('{}.csv'.format(dataname))), delimiter =",", index_col=False, header=0)
             logging.debug('{}{} Read ::'.format(htlname,dataname))
             logging.debug(staahfile)
 
-        elif ch_man == 'StayFlexi':        # Y.K. 06"Dec
+        elif ch_man == 'StayFlexi':                                                           # Y.K. 06"Dec
             staahfile = pd.read_csv(freshpth+'\{}'.format(htlname+str('{}.csv'.format(dataname))), delimiter =",", index_col=False, header=0,skipfooter=1)
             logging.debug('{}{} Read ::'.format(htlname,dataname))
             logging.debug(staahfile)
 
-        elif ch_man == 'Synxis':           # Y.K. 07"Dec
+        elif ch_man == 'Synxis':                                                                # Y.K. 07"Dec
             # staahfile = pd.read_csv(freshpth + '\{}'.format(htlname + str('{}.csv'.format(dataname))), delimiter=",",index_col=False, header=0, skipfooter=2)
             staahfile = pd.read_csv(freshpth + '\{}'.format(htlname + str('{}.csv'.format(dataname))), delimiter=",",index_col=False, header=0)
             staahfile = staahfile.drop(staahfile.index[-2:])            #Y.K. 07"Dec added for the last two row remove bcz there are unwanted values.
