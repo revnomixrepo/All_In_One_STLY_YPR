@@ -2,6 +2,10 @@
 """
 Created on Thu Apr 11 14:53:00 2019
 Auther: Krishna Biradar
+
+updated on 20 Apr 2022
+by Yadnesh Kolhe
+
 Read different Channel Manager Transaction Data
 """
 
@@ -25,14 +29,19 @@ def read_trans(freshpth,htlname,ch_man,condn2):
     try:
         #----------------------------------------------------------------------
         if ch_man == 'Staah':
-            # staahfile = pd.read_excel(freshpth+'\{}'.format(htlname+str('{}.xls'.format(dataname))))
-            staahfile = pd.read_csv(freshpth+'\{}'.format(htlname+str('{}.csv'.format(dataname))))
+            # staahfile = pd.read_excel(freshpth + '\{}'.format(htlname + str('{}.xls'.format(dataname)),encoding='unicode_escape'))
+            try:
+                staahfile = pd.read_csv(freshpth+'\{}'.format(htlname+str('{}.csv'.format(dataname))))
+            except:
+                staahfile = pd.read_excel(freshpth + '\{}'.format(htlname + str('{}.xls'.format(dataname)),encoding='unicode_escape'))
+
+            staahfile.dropna(subset=['CheckIn Date', 'CheckOut Date'], inplace=True)
 
             logging.debug('{}{} Read ::'.format(htlname,dataname))
 
             logging.debug(staahfile)
 
-        if ch_man == 'RevSeed':
+        elif ch_man == 'RevSeed':
             # staahfile = pd.read_excel(freshpth+'\{}'.format(htlname+str('{}.xls'.format(dataname))))
             staahfile = pd.read_csv(freshpth + '\{}'.format(htlname + str('{}.csv'.format(dataname))))
 
@@ -65,6 +74,8 @@ def read_trans(freshpth,htlname,ch_man,condn2):
             except:
                 staahfile = pd.read_csv(freshpth + '\{}'.format(htlname + str('{}.csv'.format(dataname))))
             staahfile['Nights']=1
+            staahfile.dropna(subset=['Status'], inplace=True)
+
 
         elif ch_man == 'AxisRooms':
             try:
@@ -246,6 +257,14 @@ def read_trans(freshpth,htlname,ch_man,condn2):
             #----------------------------------------------------------------------------------
             logging.debug('{}{} Read ::'.format(htlname,dataname))
             logging.debug(staahfile)
+
+        elif ch_man == 'Ease Room':   # Hemlata added by 21 APRIL 2022
+
+            staahfile = pd.read_excel(freshpth + '\{}'.format(htlname + str('{}.xlsx'.format(dataname))))
+            logging.debug('{}{} Read ::'.format(htlname, dataname))
+            logging.debug(staahfile)
+
+
 
         else:
             logging.info("'{}': No such Channel Manager Added in masters !!!".format(ch_man))

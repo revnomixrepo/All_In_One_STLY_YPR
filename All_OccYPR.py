@@ -11,6 +11,9 @@ import consolidate as cons
 import pandas as pd
 import All_Occ_Fun
 from datetime import datetime
+import warnings
+warnings.filterwarnings('ignore')
+
 
 ddmmyy = datetime.now()
 tday = ddmmyy.strftime("%d_%b_%Y")

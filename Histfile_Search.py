@@ -10,6 +10,8 @@ import sys
 import logging
 import pandas as pd
 import readTransData as rTrans
+import warnings
+warnings.filterwarnings('ignore')
 
 def CM_dateconv(cmfile2,form_dict,chman,hotelname,std_pth):
     logging.debug('------------------------------------------------------------')

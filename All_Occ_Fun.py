@@ -14,7 +14,8 @@ import csvValidate as csv_val
 import Histfile_Search as find_hist
 from datetime import datetime,timedelta
 import Revenomix_Append
-
+import warnings
+warnings.filterwarnings('ignore')
 
 ddmmyy = datetime.now()
 tday = ddmmyy.strftime("%d_%b_%Y")
