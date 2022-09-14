@@ -76,6 +76,13 @@ def read_trans(freshpth,htlname,ch_man,condn2):
             staahfile['Nights']=1
             staahfile.dropna(subset=['Status'], inplace=True)
 
+        elif ch_man == 'Phobs':
+            staahfile = pd.read_excel(freshpth + '\{}'.format(htlname + str('{}.xlsx'.format(dataname))), header=1)
+            staahfile = staahfile.dropna(how = 'all',axis=1)
+            staahfile['Total'] = staahfile['Total'].str.split(",").str[0]
+            staahfile['Rooms'] = 1
+            logging.debug('{}{} Read ::'.format(htlname, dataname))
+            logging.debug(staahfile)
 
         elif ch_man == 'AxisRooms':
             try:
@@ -179,6 +186,7 @@ def read_trans(freshpth,htlname,ch_man,condn2):
             logging.debug(staahfile)
 
         elif ch_man == 'StayFlexi':                                                           # Y.K. 06"Dec
+
             staahfile = pd.read_csv(freshpth+'\{}'.format(htlname+str('{}.csv'.format(dataname))), delimiter =",", index_col=False, header=0,skipfooter=1)
             logging.debug('{}{} Read ::'.format(htlname,dataname))
             logging.debug(staahfile)
@@ -263,8 +271,6 @@ def read_trans(freshpth,htlname,ch_man,condn2):
             staahfile = pd.read_excel(freshpth + '\{}'.format(htlname + str('{}.xlsx'.format(dataname))))
             logging.debug('{}{} Read ::'.format(htlname, dataname))
             logging.debug(staahfile)
-
-
 
         else:
             logging.info("'{}': No such Channel Manager Added in masters !!!".format(ch_man))

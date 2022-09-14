@@ -23,7 +23,7 @@ tday2 = ddmmyy.strftime("%d%b%y")
 def stly_pth(acc_man, condn2, isell_pth, std_pth, logflag):
     
     #================================Logger Addition===================================
-    logpth = std_pth + '\\' + 'logs'    
+    logpth = std_pth + '\\' + 'logs'
     import logging    
     #---------------------------------log flag-----------------------------------------------
     if logflag == 'DEBUG':
@@ -108,12 +108,15 @@ def stly_pth(acc_man, condn2, isell_pth, std_pth, logflag):
         yprdata = track_list
     
         #------------------------------------------------------------------------------
+        ##@Yadnesh Change the below line-code for auto-fetching the input data path
     #--------------------------------------------------------------------------------------------------------    
-    else:            
-        pth = r'{}'.format(input("Pl enter path containing fresh YPR_Data Files with std names:"))
-        yprdata=os.listdir(pth)        
-        
-    
+    else:
+        pth = std_pth + '\Account_Manager/{}/InputData/'.format(acc_man)
+        yprdata = os.listdir(pth)
+        # ------------------------------------------------------------------------------------------------------------------------
+        # pth = r'{}'.format(input("Pl enter path containing fresh YPR_Data Files with std names:"))
+        # yprdata=os.listdir(pth)
+
     if len(yprdata) == 0:
         logging.info('\n#### Please Check Path Provided & Account Manager Name given in Tool\nPath provided contains No YPR_Data files ####\n')
         print('\n#### Please Check Path Provided & Account Manager Name given in Tool\nPath provided contains No YPR_Data files ####\n')
@@ -143,7 +146,7 @@ def stly_pth(acc_man, condn2, isell_pth, std_pth, logflag):
             sys.exit()
         #----------------------------------------------------------------------------------
         datapath=std_pth+r'\Account_Manager\{}'.format(acc_man)          
-        All_Occ_Fun.CM_All(sr, pth, datapath, CM, stdname, outpth, condn2, isell_pth, std_pth, fileform, htl_amount, cm_master, names, chnl_Map, statuscode)
+        All_Occ_Fun.CM_All(sr, pth, datapath, CM, stdname, outpth, condn2, isell_pth, std_pth, fileform, htl_amount, cm_master, names, chnl_Map, statuscode,channelMap)
     
     logging.info("##### All Occupancy Frames Created ! Thank You ! ###### ")
     print("##### All Occupancy Frames Created ! Thank You ! ######")

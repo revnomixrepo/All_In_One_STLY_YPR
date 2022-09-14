@@ -32,7 +32,8 @@ WDWE = {'Mon':'WD','Tue':'WD','Wed':'WD','Thu':'WD','Fri':'WE','Sat':'WE','Sun':
 #-------------------------------------------------------------------------------------------------------------------------
 #--------------------------------------One Function for All CMs-----------------------------------------------------------
 
-def CM_All(sr,cmpth, cmdatapth, chman, hotelname, outpth, condn2, isell_pth, std_pth, fileform, htl_amount, cm_master, names, chnl_Map, statuscode):
+def CM_All(sr,cmpth, cmdatapth, chman, hotelname, outpth, condn2, isell_pth, std_pth, fileform,
+           htl_amount, cm_master, names, chnl_Map, statuscode,channelMap):
     logging.debug('------------------------------------------------------------')
     logging.debug('Module:All_Occ_Fun, SubModule:CM_All')
     #----------------Date Format Dictionary------------------------------------
@@ -110,22 +111,41 @@ def CM_All(sr,cmpth, cmdatapth, chman, hotelname, outpth, condn2, isell_pth, std
     Occdf['Channel'] = Occdf['Channel'].str.strip()    
     Occdf['ChannelName'] = Occdf['Channel'].map(chnl_Map)
     Occdf['ChannelName'].fillna(value='#blank',inplace=True)
-    
-    #--------------------checking channel mapping------------------------------
+
+    #-----------------------------------------------------------------------------------------------------
+        # If channel added in any property then to required new channel name appendin the ChannelMap mapping
+           # Now,This process is automated from the below code
+    #-------------------------  28_June_2022 --------------------------------------------------------
     blnk_ch = pd.DataFrame(Occdf[Occdf['ChannelName'] == '#blank'])
     blnk_ch2 = list(blnk_ch['Channel'].unique())
-    if len(blnk_ch2) == 0:
-        logging.info('All Channel names are mapped with Standard Names')
-#        print('All Channel names are mapped with Standard Names')
+
+    if len(blnk_ch2) > 0:
+        for i in blnk_ch2:
+            channelMap1 = channelMap.append({'Channel': i, 'stdChannel': i},ignore_index = True)
+        channelMap1 = channelMap1.drop_duplicates()
+        channelMap1.to_excel(std_pth + r'\YPR_masters\channelMap.xlsx',index=False)
+        Occdf['ChannelName'] = Occdf['Channel']
     else:
-        logging.info('##### ChannelNames not mapped for :{} \n Please check unmapped_data folder ######'.format(hotelname)) 
-        print('##### ChannelNames not mapped for :{} \n Please check unmapped_data folder ######'.format(hotelname))        
-        blnk_ch2 = pd.DataFrame(blnk_ch.loc[:,['Channel','ChannelName']])
-        blnk_ch2.drop_duplicates(subset='Channel',inplace=True)
-        blnk_ch2.to_csv(std_pth+r'\unmapped_data\channelMAP_{}_{}.csv'.format(hotelname,tday2))
-        logging.debug('Unmapped Channel Names in data are ::')
-        logging.debug(blnk_ch2)
-        sys.exit()   
+        pass
+    #-------------------------------------------------------------------------------------------------------
+
+    #--------------------checking channel mapping------------------------------
+#     blnk_ch = pd.DataFrame(Occdf[Occdf['ChannelName'] == '#blank'])
+#     blnk_ch2 = list(blnk_ch['Channel'].unique())
+#     if len(blnk_ch2) == 0:
+#         logging.info('All Channel names are mapped with Standard Names')
+###        print('All Channel names are mapped with Standard Names')
+#     else:
+#         logging.info('##### ChannelNames not mapped for :{} \n Please check unmapped_data folder ######'.format(hotelname))
+#         print('##### ChannelNames not mapped for :{} \n Please check unmapped_data folder ######'.format(hotelname))
+#         blnk_ch2 = pd.DataFrame(blnk_ch.loc[:,['Channel','ChannelName']])
+#         blnk_ch2.drop_duplicates(subset='Channel',inplace=True)
+#         blnk_ch2.to_csv(std_pth+r'\unmapped_data\channelMAP_{}_{}.csv'.format(hotelname,tday2))
+#         logging.debug('Unmapped Channel Names in data are ::')
+#         logging.debug(blnk_ch2)
+#         sys.exit()
+#-------------------------------------------------------------------------------------------------
+
     #------------------------------set positive pace--------------------------------------------
     Occdf['AvgLead'] = np.where(Occdf['AvgLead'] < 0,0,Occdf['AvgLead'])    
     
@@ -225,7 +245,7 @@ def Occ_conv(inputfile,chman,htl,isell_pth,std_pth,statuscode):
     
     #========================Set Room Rev Formats==============================
     # df_date1['No_of_Rooms'] = df_date1['No_of_Rooms'].astype("Int32")
-    df_date1['No_of_Rooms'] = df_date1['No_of_Rooms'].astype(int)
+    df_date1['No_of_Rooms'] = df_date1['No_of_Rooms'].fillna(0).astype(int)
     try:
         df_date1['Total_Amount'] = df_date1['Total_Amount'].astype(float)
     except:
