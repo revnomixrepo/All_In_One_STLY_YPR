@@ -187,7 +187,9 @@ def CM_All(sr,cmpth, cmdatapth, chman, hotelname, outpth, condn2, isell_pth, std
         try:
             histfile4['Total_Amount'] = histfile4['Total_Amount'].astype(float)
         except:
-            histfile4["Total_Amount"] = histfile4["Total_Amount"].str.replace(',', '').astype(float)
+            # histfile4["Total_Amount"] = histfile4["Total_Amount"].str.replace(',', '').astype(float)
+            histfile4["Total_Amount"] = histfile4["Total_Amount"].replace(',', 0).replace('-', 0).astype(float)
+
         
         histfile4['No_of_Rooms'] = histfile4['No_of_Rooms'].fillna(value=0)
         histfile4['No_of_Rooms'] = histfile4['No_of_Rooms'].astype(int)          
@@ -249,8 +251,8 @@ def Occ_conv(inputfile,chman,htl,isell_pth,std_pth,statuscode):
     try:
         df_date1['Total_Amount'] = df_date1['Total_Amount'].astype(float)
     except:
-        df_date1["Total_Amount"] = df_date1["Total_Amount"].str.replace(',', '').astype(float)
-
+        # df_date1["Total_Amount"] = df_date1["Total_Amount"].str.replace(',', '').astype(float)
+        df_date1["Total_Amount"] = df_date1["Total_Amount"].replace(',', 0).replace('-', 0).astype(float)
     logging.debug('Set datatypes for No_of_Rooms and Total_Amount, int and float respectively')
 
     # ===================== Occupancy History section ===============================
