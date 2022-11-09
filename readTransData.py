@@ -48,6 +48,7 @@ def read_trans(freshpth,htlname,ch_man,condn2):
 
         elif ch_man == 'Staah Max':
             otafile = pd.read_excel(freshpth + '\{}'.format(htlname + str('{}.xlsx'.format(dataname))),header=2)
+            # otafile = pd.read_excel(freshpth + '\{}'.format(htlname + str('{}.xlsx'.format(dataname))))
             otafile.dropna(subset=['Arrival Date', 'Departure Date'], inplace=True)
             staahfile = pd.DataFrame(otafile)
             staahfile['Arrival Date'] = staahfile['Arrival Date'].str.split(',', expand=True)[0]
@@ -156,14 +157,14 @@ def read_trans(freshpth,htlname,ch_man,condn2):
 
         elif ch_man == 'SiteMinder':
             staahfile = pd.read_csv(freshpth+'\{}'.format(htlname+str('{}.csv'.format(dataname))))
-
             try:
                 staahfile.drop('Affiliated Channel',axis=1,inplace=True)
             except:
                 pass
             staahfile.dropna(axis=0,subset=['Check In','Check Out'],inplace=True)
 #            staahfile['Total Amount'] = staahfile['Total Amount'].str.extract('(\d+)').astype(int)
-            staahfile['Total Amount'] = staahfile['Total Amount'].str.extract('([-+]?\d*\.\d+|\d+)')
+#            staahfile['Total Amount'] = staahfile['Total Amount'].str.extract('([-+]?\d*\.\d+|\d+)')
+            staahfile['Total Amount'] = staahfile['Total Amount'].str.split('(', 1).str[0].str.strip().astype(float)
             staahfile['Total Amount'].fillna(value=0,inplace=True)
             staahfile['Total Amount'] = staahfile['Total Amount'].astype(float)
             staahfile['Rooms']=1
@@ -186,8 +187,14 @@ def read_trans(freshpth,htlname,ch_man,condn2):
             logging.debug(staahfile)
 
         elif ch_man == 'StayFlexi':                                                           # Y.K. 06"Dec
-
-            staahfile = pd.read_csv(freshpth+'\{}'.format(htlname+str('{}.csv'.format(dataname))), delimiter =",", index_col=False, header=0,skipfooter=1)
+            # staahfile = pd.read_csv(freshpth+'\{}'.format(htlname+str('{}.csv'.format(dataname))), delimiter =",", index_col=False, header=0,skipfooter=1)
+            try:
+                staahfile = pd.read_excel(freshpth+'\{}'.format(htlname+str('{}.xlsx'.format(dataname)),skipfooter=1))
+            except:
+                staahfile = pd.read_csv(
+                    freshpth+'\{}'.format(htlname+str('{}.csv'.format(dataname))), delimiter =",", index_col=False, header=0,skipfooter=1)
+            staahfile = staahfile.dropna(thresh=5)
+            staahfile['Rooms'] = 1
             logging.debug('{}{} Read ::'.format(htlname,dataname))
             logging.debug(staahfile)
 
