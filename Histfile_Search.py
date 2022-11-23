@@ -25,7 +25,7 @@ def CM_dateconv(cmfile2,form_dict,chman,hotelname,std_pth):
 
     logging.debug('Date Format Dictionary for {} Channel Manager ::'.format(chman))
     logging.debug(form_dict)
-    #============================================================================
+    #====================================================================================
     #--------------------------------------Booking Date----------------------------------#
     try:
         cmfile2['Booking_Date'] = pd.to_datetime(cmfile2['Booking_Date'], format="{}".format(form_dict['Booking']), errors = 'coerce')
