@@ -94,8 +94,8 @@ def read_trans(freshpth,htlname,ch_man,condn2):
             logging.debug('{}{} Read ::'.format(htlname,dataname))
             logging.debug(staahfile)
 
-            staahfile['Product'] = staahfile['Product'].str.strip()
-            staahfile = pd.DataFrame(staahfile[staahfile['Product'] == htlname])
+            # staahfile['Product'] = staahfile['Product'].str.strip()
+            # staahfile = pd.DataFrame(staahfile[staahfile['Product'] == htlname])
 
             #---------------------------add stlycol as Booking Date itself--------------------------------------
             staahfile['STLYDateCol'] = staahfile['Booking Time']
@@ -121,6 +121,7 @@ def read_trans(freshpth,htlname,ch_man,condn2):
 
         elif ch_man == 'eZee':
             staahfile = pd.read_csv(freshpth+'\{}'.format(htlname+str('{}.csv'.format(dataname))))
+            staahfile = staahfile.dropna(subset=['Status'])
             staahfile.dropna(axis=0,subset=['Arrival','Dept'],inplace=True)
             staahfile['Rooms']=1
             #---------------------------add stlycol as Booking Date itself--------------------------------------
@@ -193,7 +194,7 @@ def read_trans(freshpth,htlname,ch_man,condn2):
             except:
                 staahfile = pd.read_csv(
                     freshpth+'\{}'.format(htlname+str('{}.csv'.format(dataname))), delimiter =",", index_col=False, header=0,skipfooter=1)
-            staahfile = staahfile.dropna(thresh=5)
+            staahfile = staahfile.dropna(thresh=6)
             staahfile['Rooms'] = 1
             logging.debug('{}{} Read ::'.format(htlname,dataname))
             logging.debug(staahfile)

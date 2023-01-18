@@ -119,7 +119,8 @@ def stly_pth(acc_man, condn2, isell_pth, std_pth, logflag):
 
     if len(yprdata) == 0:
         logging.info('\n#### Please Check Path Provided & Account Manager Name given in Tool\nPath provided contains No YPR_Data files ####\n')
-        print('\n#### Please Check Path Provided & Account Manager Name given in Tool\nPath provided contains No YPR_Data files ####\n')
+        print('\n## Please Check Path Provided & Account Manager Name given in Tool\nPath provided contains No YPR_Data files ####\n')
+        print('YPR input data file is not Available. \n Check the standard name "HotelName_YPRData"')
         sys.exit()
     else:
         pass

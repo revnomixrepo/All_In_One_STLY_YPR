@@ -61,7 +61,14 @@ def CM_All(sr,cmpth, cmdatapth, chman, hotelname, outpth, condn2, isell_pth, std
     
     if filecondn == 'FreshwithCSV':
         cmfile.rename(columns=cm_namecol,inplace=True)
-        cmfile22 = pd.DataFrame(cmfile.loc[:,std_cols])
+        cmfile22 = pd.DataFrame(cmfile.loc[:, std_cols])
+        #-----------------------add below line code for updated data if it is blank @30Nov2022 -------------------------------------------------------------
+        # try:
+        #     cmfile22 = pd.DataFrame(cmfile.loc[:,std_cols])
+        # except:
+        #     std_cols1 = std_cols.copy()
+        #     std_cols1.remove('UpdatedDate')
+        #     cmfile22 = pd.DataFrame(cmfile.loc[:, std_cols1])
         #----------------std Hotelname added from filename to the fresh data-----------------
         cmfile22['Hotel'] = hotelname
         #------------------------------------------------------------------------------------
@@ -73,6 +80,14 @@ def CM_All(sr,cmpth, cmdatapth, chman, hotelname, outpth, condn2, isell_pth, std
     elif filecondn == 'onlyFresh':
         cmfile.rename(columns=cm_namecol,inplace=True)
         cmfile22 = pd.DataFrame(cmfile.loc[:,std_cols])
+        #-----------------------add below line code for updated data if it is blank @30Nov2022 -------------------------------------------------------------
+        # try:
+        #     cmfile22 = pd.DataFrame(cmfile.loc[:,std_cols])
+        # except:
+        #     std_cols1 = std_cols.copy()
+        #     std_cols1.remove('UpdatedDate')
+        #     cmfile22 = pd.DataFrame(cmfile.loc[:, std_cols1])
+
         #----------------std Hotelname added from filename to the fresh data----------------
         # cmfile22['Hotel'] = hotelname
         cmfile22['Hotel'] = hotelname
@@ -169,7 +184,8 @@ def CM_All(sr,cmpth, cmdatapth, chman, hotelname, outpth, condn2, isell_pth, std
     Occdf4.to_csv(outpth+'\\{}\\'.format(tday)+'{}_Normal_Frame_{}.csv'.format(hotelname,tday2))    
     logging.info('{}.{}_{} STLY & Normal Frames created !'.format(sr,hotelname,chman))        
     print('{}.{}_{} STLY & Normal Frames created !'.format(sr,hotelname,chman))
-    
+    print("==========================================================================================================")
+
     #================================Historic CSV Dump(Not for PerformanceTracker)======================================== 
     #Note: This step over writes Historic CSV in Historic_STLY_CSVs folder if condn2 = 0, means Manual YPR Preparation 
     #condn2 = 1 means Performance Tracker, it runs daily reads all input files and prepares All YPRs, 
@@ -210,7 +226,6 @@ def CM_All(sr,cmpth, cmdatapth, chman, hotelname, outpth, condn2, isell_pth, std
         #===================================================================================================       
     else:
         pass
-
    
 #-----------------------------------------------------------------------------------------------------------------------   
 #--------------------------------------Ocupancy Conversion--------------------------------------------------------------
